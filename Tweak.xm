@@ -43,12 +43,12 @@ static NSString *pillColor = @"E63B79";
 
 
 static void reloadSettings() {
+		static CFStringRef prefsKey = CFSTR("com.p2kdev.colorbar");
+		CFPreferencesAppSynchronize(prefsKey);
 
-	NSMutableDictionary *prefs = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.p2kdev.colorbar.plist"];
-	if(prefs)
-	{
-	  pillColor = [prefs objectForKey:@"pillColor"] ? [[prefs objectForKey:@"pillColor"] stringValue] : pillColor;
-	}
+		if (CFBridgingRelease(CFPreferencesCopyAppValue((CFStringRef)@"pillColor", prefsKey))) {
+			pillColor = [(id)CFBridgingRelease(CFPreferencesCopyAppValue((CFStringRef)@"pillColor", prefsKey)) stringValue];
+		}
 }
 
 %ctor {
