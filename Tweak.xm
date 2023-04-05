@@ -6,10 +6,15 @@ static NSString *pillColor = @"E63B79";
   @property (nonatomic,retain) UIView * colorBarView;
 @end
 
+static UIColor* getColorFromLib() {
+  return LCPParseColorString(pillColor, @"#E63B79");
+  //return [UIColor colorWithRed:0.90 green:0.23 blue:0.47 alpha:1.00];
+}
+
 %hook MTStaticColorPillView
   -(void)setPillColor:(UIColor *)arg1
   {
-    %orig(LCPParseColorString(pillColor, @"#E63B79"));
+    %orig(getColorFromLib());
   }
 %end
 
@@ -27,7 +32,7 @@ static NSString *pillColor = @"E63B79";
     [self.colorBarView.widthAnchor constraintEqualToAnchor:self.widthAnchor].active = YES;
     [self.colorBarView.heightAnchor constraintEqualToAnchor:self.heightAnchor].active = YES;
 
-    self.colorBarView.backgroundColor = LCPParseColorString(pillColor, @"#E63B79");
+    self.colorBarView.backgroundColor = getColorFromLib();
     return orig;
   }
 
